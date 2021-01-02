@@ -18,6 +18,10 @@ import {
 import { useState } from 'react';
 
 const useStyles = makeStyles({
+  tableCell: {
+    whiteSpace: 'nowrap',
+    verticalAlign: 'top',
+  },
   textField: {
     '& label.Mui-focused': {
       color: 'orange',
@@ -105,11 +109,14 @@ const EnhancedTableHead = ({
   return (
     <TableHead>
       <TableRow>
-        <TableCell style={{ whiteSpace: 'nowrap' }} component="th" scope="row">
+        <TableCell className={classes.tableCell} component="th" scope="row">
           ID
         </TableCell>
         {headCells.map((headCell) => (
-          <TableCell style={{ whiteSpace: 'nowrap' }} key={headCell.id}>
+          <TableCell
+            className={classes.tableCell}
+            style={{ whiteSpace: 'nowrap' }}
+            key={headCell.id}>
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
@@ -153,7 +160,9 @@ const EnhancedTableHead = ({
             </Box>
           </TableCell>
         ))}
-        <TableCell align="center">Actions</TableCell>
+        <TableCell className={classes.tableCell} align="center">
+          Actions
+        </TableCell>
       </TableRow>
     </TableHead>
   );
