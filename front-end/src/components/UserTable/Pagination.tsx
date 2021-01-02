@@ -60,6 +60,7 @@ const Pagination = ({
 
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     setRowsPerPage(e.target.value as number);
+    setPage(1);
   };
   return (
     <Toolbar className={classes.toolbar}>
