@@ -79,6 +79,7 @@ const UserTable = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [filters, setFilters] = useState<Filters>({});
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openActions, setOpenActions] = useState<number>(-1);
 
   const [userIndex, setUserIndex] = useState<number>(-1);
   const handleRequestSort = (key: keyof Data) => {
@@ -141,8 +142,12 @@ const UserTable = ({
       }));
     }
   };
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
     setAnchorEl(event.currentTarget);
+    setOpenActions(index);
   };
 
   const handleClose = (type: 'Edit' | 'Delete' | 'Close', index: number) => {
@@ -151,6 +156,7 @@ const UserTable = ({
     } else if (type === 'Edit') {
       setUserIndex(index);
     }
+    setOpenActions(-1);
     setAnchorEl(null);
   };
   return (
@@ -179,12 +185,12 @@ const UserTable = ({
                   <TableCell>{preprocessDate(row.birthdate)}</TableCell>
                   <TableCell>{preprocessDate(row.createdAt)}</TableCell>
                   <TableCell>
-                    <IconButton onClick={handleClick}>
+                    <IconButton onClick={(e) => handleClick(e, index)}>
                       <MoreVertIcon />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl}
-                      open={anchorEl !== null}
+                      open={openActions === index}
                       onClose={() => handleClose('Close', -1)}>
                       <MenuItem onClick={() => handleClose('Edit', index)}>
                         Edit
