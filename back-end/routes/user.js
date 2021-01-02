@@ -44,10 +44,15 @@ router.get('/users', async (req, res) => {
     //   }
     // }
     console.log(filtersToApply, sortOrder, skip, pageSize);
-    const users = await User.find(filtersToApply)
-      .sort(sortOrder)
-      .skip(+skip)
-      .limit(+pageSize);
+    let users = [];
+    if (+pageSize === -1) {
+      users = await User.find(filtersToApply).sort(sortOrder);
+    } else {
+      users = await User.find(filtersToApply)
+        .sort(sortOrder)
+        .skip(+skip)
+        .limit(+pageSize);
+    }
     const count = await User.countDocuments(filtersToApply);
 
     res.status(200).send({ users, count });

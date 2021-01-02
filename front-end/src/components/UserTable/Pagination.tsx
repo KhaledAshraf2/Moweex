@@ -55,8 +55,8 @@ const Pagination = ({
   rowsCount,
 }: PaginationProps) => {
   const classes = useStyles();
-  const rowsPerPageOptions = [10, 15, 25, 50];
-  const lastPage = Math.ceil(rowsCount / rowsPerPage);
+  const rowsPerPageOptions = [10, 25, 50, -1];
+  const lastPage = rowsPerPage === -1 ? 1 : Math.ceil(rowsCount / rowsPerPage);
 
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     setRowsPerPage(e.target.value as number);
@@ -70,7 +70,7 @@ const Pagination = ({
         onChange={handleChange}>
         {rowsPerPageOptions.map((option, index) => (
           <MenuItem key={index} value={option}>
-            {option}
+            {option === -1 ? 'All' : option}
           </MenuItem>
         ))}
       </Select>
