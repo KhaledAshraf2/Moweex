@@ -71,7 +71,7 @@ const UserTable = ({
   setFinishMessage,
 }: UserTableProps) => {
   const [rows, setRows] = useState<Data[]>([]);
-  const [order, setOrder] = useState<Order>('asc');
+  const [order, setOrder] = useState<Order>('desc');
   const [orderBy, setOrderBy] = useState<keyof Data>('createdAt');
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
