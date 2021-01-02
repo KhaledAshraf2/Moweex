@@ -1,10 +1,5 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
-import {
-  withStyles,
-  Theme,
-  createStyles,
-  makeStyles,
-} from '@material-ui/core/styles';
+import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,10 +10,16 @@ import EnhancedTableHead from './EnhancedTableHead';
 import Pagination from './Pagination';
 import { useState } from 'react';
 import axios from 'axios';
-import { Backdrop, Box, Button, CircularProgress } from '@material-ui/core';
+import {
+  Backdrop,
+  CircularProgress,
+  IconButton,
+  Menu,
+  MenuItem,
+} from '@material-ui/core';
 import { FinishMessage } from '../../App';
 import UserModal from '../UserModal/UserModal';
-
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 export interface Data {
   _id: string;
   firstName: string;
@@ -37,15 +38,7 @@ const StyledTableRow = withStyles((theme: Theme) =>
     },
   }),
 )(TableRow);
-const useStyles = makeStyles({
-  orangeButton: {
-    color: 'white',
-    backgroundColor: 'orange',
-    '&:hover': {
-      backgroundColor: 'orangered',
-    },
-  },
-});
+
 export type Order = 'asc' | 'desc';
 
 const preprocessDate = (date: string | null) => {
@@ -77,7 +70,6 @@ const UserTable = ({
   setRefresh,
   setFinishMessage,
 }: UserTableProps) => {
-  const classes = useStyles();
   const [rows, setRows] = useState<Data[]>([]);
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Data>('firstName');
@@ -86,6 +78,7 @@ const UserTable = ({
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [filters, setFilters] = useState<Filters>({});
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const [userIndex, setUserIndex] = useState<number>(-1);
   const handleRequestSort = (key: keyof Data) => {
@@ -148,6 +141,18 @@ const UserTable = ({
       }));
     }
   };
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (type: 'Edit' | 'Delete' | 'Close', index: number) => {
+    if (type === 'Delete') {
+      handleDeleteUser(rows[index]._id);
+    } else if (type === 'Edit') {
+      setUserIndex(index);
+    }
+    setAnchorEl(null);
+  };
   return (
     <>
       <Paper>
@@ -174,28 +179,20 @@ const UserTable = ({
                   <TableCell>{preprocessDate(row.birthdate)}</TableCell>
                   <TableCell>{preprocessDate(row.createdAt)}</TableCell>
                   <TableCell>
-                    <Box display="flex" flexDirection="column" gridRowGap="1vw">
-                      <Box>
-                        <Button
-                          size="small"
-                          fullWidth
-                          className={classes.orangeButton}
-                          onClick={() => setUserIndex(index)}
-                          variant="contained">
-                          Edit
-                        </Button>
-                      </Box>
-                      <Box>
-                        <Button
-                          size="small"
-                          fullWidth
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => handleDeleteUser(row._id)}>
-                          Delete
-                        </Button>
-                      </Box>
-                    </Box>
+                    <IconButton onClick={handleClick}>
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={anchorEl !== null}
+                      onClose={() => handleClose('Close', -1)}>
+                      <MenuItem onClick={() => handleClose('Edit', index)}>
+                        Edit
+                      </MenuItem>
+                      <MenuItem onClick={() => handleClose('Delete', index)}>
+                        Delete
+                      </MenuItem>
+                    </Menu>
                   </TableCell>
                 </StyledTableRow>
               ))}
