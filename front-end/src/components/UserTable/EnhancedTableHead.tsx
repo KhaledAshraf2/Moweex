@@ -128,6 +128,7 @@ const EnhancedTableHead = ({
               {headCell.id === 'birthdate' || headCell.id === 'createdAt' ? (
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
+                    placeholder="Filter"
                     disableFuture
                     clearable
                     className={classes.textField}
@@ -154,6 +155,7 @@ const EnhancedTableHead = ({
                 </MuiPickersUtilsProvider>
               ) : (
                 <TextField
+                  placeholder="Filter"
                   onBlur={(e) => {
                     createFilterHandler(e, headCell.id as keyof Filters);
                   }}></TextField>
