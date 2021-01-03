@@ -128,6 +128,7 @@ const EnhancedTableHead = ({
               {headCell.id === 'birthdate' || headCell.id === 'createdAt' ? (
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
+                    disableFuture
                     clearable
                     className={classes.textField}
                     format="dd/MM/yyyy"

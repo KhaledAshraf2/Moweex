@@ -252,6 +252,7 @@ const UserModal: React.FC<UserModalProps> = ({
             />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
+                disableFuture
                 InputLabelProps={{
                   style: {
                     textOverflow: 'ellipsis',
