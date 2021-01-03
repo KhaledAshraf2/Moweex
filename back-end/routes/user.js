@@ -23,7 +23,7 @@ router.get('/users', async (req, res) => {
     filterFields.forEach((field) => {
       if (req.query[field]) {
         if (field !== 'createdAt' && field !== 'birthdate') {
-          filtersToApply[field] = new RegExp(`${req.query[field]}`);
+          filtersToApply[field] = new RegExp(`${req.query[field]}`, 'i');
         } else {
           console.log(new Date(req.query[field]).valueOf());
           filtersToApply[field] = {
